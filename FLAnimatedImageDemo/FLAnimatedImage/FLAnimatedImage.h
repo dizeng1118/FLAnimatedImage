@@ -7,7 +7,7 @@
 //
 
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @protocol FLAnimatedImageDebugDelegate;
 
@@ -18,10 +18,9 @@
 //  It tries to intelligently choose the frame cache size depending on the image and memory situation with the goal to lower CPU usage for smaller ones, lower memory usage for larger ones and always deliver frames for high performant play-back.
 //  Note: `posterImage`, `size`, `loopCount`, `delayTimes` and `frameCount` don't change after successful initialization.
 //
-@interface FLAnimatedImage : NSObject
+@interface FLAnimatedImage : UIImage
 
 @property (nonatomic, strong, readonly) UIImage *posterImage; // Guaranteed to be loaded; usually equivalent to `-imageLazilyCachedAtIndex:0`
-@property (nonatomic, assign, readonly) CGSize size; // The `.posterImage`'s `.size`
 
 @property (nonatomic, assign, readonly) NSUInteger loopCount; // 0 means repeating the animation indefinitely
 @property (nonatomic, strong, readonly) NSArray *delayTimes; // Of type `NSTimeInterval` boxed in `NSNumber`s
@@ -41,6 +40,9 @@
 // Designated initializer
 // On success, returns a new `FLAnimatedImage` with all fields populated, on failure returns `nil` and an error will be logged.
 - (instancetype)initWithAnimatedGIFData:(NSData *)data;
+
+// If the data is a GIF data, returns an 'FLAnimatedImage', otherwise returns a normal UIImage;
++ (UIImage*)imageWithData:(NSData *)data;
 
 @property (nonatomic, strong, readonly) NSData *data; // The data the receiver was initialized with; read-only
 

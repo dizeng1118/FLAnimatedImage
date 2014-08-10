@@ -122,12 +122,12 @@
 
 - (void)setImage:(UIImage *)image
 {
-    if (image) {
-        // Clear out the animated image and implicitly pause animation playback.
-        self.animatedImage = nil;
-    }
-    
-    super.image = image;
+	if ([image isKindOfClass:[FLAnimatedImage class]]) {
+		self.animatedImage = (FLAnimatedImage*)image;
+	} else {
+		self.animatedImage = nil;
+		super.image = image;
+	}
 }
 
 

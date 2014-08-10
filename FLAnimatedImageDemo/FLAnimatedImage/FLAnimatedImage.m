@@ -145,6 +145,16 @@ typedef NS_ENUM(NSUInteger, FLAnimatedImageFrameCacheSize) {
 }
 
 
++ (UIImage*)imageWithData:(NSData *)data 
+{
+	FLAnimatedImage* animatedImage = [[FLAnimatedImage alloc] initWithAnimatedGIFData:data];
+	if (animatedImage)
+		return animatedImage;
+	else
+		return [UIImage imageWithData:data];
+}
+
+
 - (instancetype)initWithAnimatedGIFData:(NSData *)data
 {
     // Early return if no data supplied!
@@ -209,8 +219,6 @@ typedef NS_ENUM(NSUInteger, FLAnimatedImageFrameCacheSize) {
                     // Set poster image
                     if (!self.posterImage) {
                         _posterImage = frameImage;
-                        // Set its size to proxy our size.
-                        _size = _posterImage.size;
                         // Remember index of poster image so we never purge it; also add it to the cache.
                         _posterImageFrameIndex = i;
                         self.cachedFrames[self.posterImageFrameIndex] = self.posterImage;
@@ -697,6 +705,43 @@ typedef NS_ENUM(NSUInteger, FLAnimatedImageFrameCacheSize) {
     return description;
 }
 
+
+#pragma mark - UIImage Compatibility methods
+
+- (CGSize)size
+{
+    if (self.posterImage) {
+        return [self.posterImage size];
+    }
+    return [super size];
+}
+
+- (CGImageRef)CGImage
+{
+    if (self.posterImage) {
+        return [self.posterImage CGImage];
+    } else {
+        return [super CGImage];
+    }
+}
+
+- (UIImageOrientation)imageOrientation
+{
+    if (self.posterImage) {
+        return [self.posterImage imageOrientation];
+    } else {
+        return [super imageOrientation];
+    }
+}
+
+- (CGFloat)scale
+{
+    if (self.posterImage) {
+        return [self.posterImage scale];
+    } else {
+        return [super scale];
+    }
+}
 
 @end
 
